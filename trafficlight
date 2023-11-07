@@ -1,0 +1,97 @@
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ShapeDrawingApplet extends Applet implements ActionListener {
+    private String selectedShape = "Circle";
+    private Color foregroundColor = Color.BLACK;
+    private Color backgroundColor = Color.WHITE;
+    
+    private CheckboxGroup shapeGroup;
+    private Checkbox circleCheckbox, squareCheckbox, rectangleCheckbox;
+    private CheckboxGroup colorGroup;
+    private Checkbox redCheckbox, greenCheckbox, blueCheckbox;
+
+    public void init() {
+        setLayout(new BorderLayout());
+        shapeGroup = new CheckboxGroup();
+        circleCheckbox = new Checkbox("Circle", shapeGroup, true);
+        squareCheckbox = new Checkbox("Square", shapeGroup, false);
+        rectangleCheckbox = new Checkbox("Rectangle", shapeGroup, false);
+
+        colorGroup = new CheckboxGroup();
+        redCheckbox = new Checkbox("Red", colorGroup, true);
+        greenCheckbox = new Checkbox("Green", colorGroup, false);
+        blueCheckbox = new Checkbox("Blue", colorGroup, false);
+        circleCheckbox.addItemListener(this);
+        squareCheckbox.addItemListener(this);
+        rectangleCheckbox.addItemListener(this);
+        redCheckbox.addItemListener(this);
+        greenCheckbox.addItemListener(this);
+        blueCheckbox.addItemListener(this);
+        Panel shapePanel = new Panel(new FlowLayout());
+        shapePanel.add(new Label("Select Shape:"));
+        shapePanel.add(circleCheckbox);
+        shapePanel.add(squareCheckbox);
+        shapePanel.add(rectangleCheckbox);
+
+        Panel colorPanel = new Panel(new FlowLayout());
+        colorPanel.add(new Label("Select Color:"));
+        colorPanel.add(redCheckbox);
+        colorPanel.add(greenCheckbox);
+        colorPanel.add(blueCheckbox);
+
+        add(shapePanel, BorderLayout.NORTH);
+        add(colorPanel, BorderLayout.SOUTH);
+    }
+
+    public void paint(Graphics g) {
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        g.setColor(foregroundColor);
+        
+        int centerX = getWidth() / 2;
+        int centerY = getHeight() / 2;
+
+        if (selectedShape.equals("Circle")) {
+            g.fillOval(centerX - 50, centerY - 50, 100, 100);
+        } else if (selectedShape.equals("Square")) {
+            g.fillRect(centerX - 50, centerY - 50, 100, 100);
+        } else if (selectedShape.equals("Rectangle")) {
+            g.fillRect(centerX - 75, centerY - 50, 150, 100);
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+    }
+
+    public void itemStateChanged(ItemEvent e) {
+        Checkbox selected = shapeGroup.getSelectedCheckbox();
+        if (selected != null) {
+            selectedShape = selected.getLabel();
+            repaint();
+        }
+
+        selected = colorGroup.getSelectedCheckbox();
+        if (selected != null) {
+            String color = selected.getLabel();
+            switch (color) {
+                case "Red":
+                    foregroundColor = Color.RED;
+                    break;
+                case "Green":
+                    foregroundColor = Color.GREEN;
+                    break;
+                case "Blue":
+                    foregroundColor = Color.BLUE;
+                    break;
+                default:
+                    break;
+            }
+            repaint();
+        }
+    }
+}

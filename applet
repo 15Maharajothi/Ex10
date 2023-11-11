@@ -1,0 +1,65 @@
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ShapeDrawerApplet extends Applet {
+    private String selectedShape = "Circle";
+    private Color foregroundColor = Color.BLACK;
+    private Color backgroundColor = Color.WHITE;
+
+    private CheckboxGroup shapeCheckboxGroup;
+    private Checkbox circleCheckbox, squareCheckbox, rectangleCheckbox;
+    private Button drawButton;
+
+    public void init() {
+        setLayout(new FlowLayout());
+
+        
+        shapeCheckboxGroup = new CheckboxGroup();
+        circleCheckbox = new Checkbox("Circle", shapeCheckboxGroup, true);
+        squareCheckbox = new Checkbox("Square", shapeCheckboxGroup, false);
+        rectangleCheckbox = new Checkbox("Rectangle", shapeCheckboxGroup, false);
+
+        drawButton = new Button("Draw");
+        drawButton.addActionListener(new DrawButtonListener());
+
+     
+        circleCheckbox.addItemListener(e -> selectedShape = "Circle");
+        squareCheckbox.addItemListener(e -> selectedShape = "Square");
+        rectangleCheckbox.addItemListener(e -> selectedShape = "Rectangle");
+
+      
+        add(circleCheckbox);
+        add(squareCheckbox);
+        add(rectangleCheckbox);
+        add(drawButton);
+    }
+
+    public void paint(Graphics g) {
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        g.setColor(foregroundColor);
+
+       
+        switch (selectedShape) {
+            case "Circle":
+                g.fillOval(50, 50, 100, 100);
+                break;
+            case "Square":
+                g.fillRect(50, 50, 100, 100);
+                break;
+            case "Rectangle":
+                g.fillRect(50, 50, 150, 100);
+                break;
+        }
+    }
+
+    private class DrawButtonListener implements ActionListener {
+       
+        public void actionPerformed(ActionEvent e) {
+            repaint();
+        }
+    }
+}
